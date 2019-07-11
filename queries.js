@@ -28,7 +28,7 @@ const getTest = async (req, res) => {
 const getUsers = (req, res) => {
   pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
     if (error) {
-      throw error
+      return res.status(401).send(error.message)
     }
     res.status(200).json(results.rows)
   })
@@ -39,7 +39,7 @@ const getUserById = (req, res) => {
 
   pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
     if (error) {
-      throw error
+      return res.status(401).send(error.message)
     }
     res.status(200).json(results.rows)
   })
@@ -49,11 +49,10 @@ const createUser = (req, res) => {
   const { username, password, email } = req.body
 
   pool.query('INSERT INTO users (username, password, email) VALUES ($1, $2, $3)', [username, password, email], (error, results) => {
-    console.log('trying to insert', username, email);
     if (error) {
-      throw error
+      return res.status(401).send(error.message)
     }
-    res.status(201).send(`User added with ID: ${results.insertId}`)
+    res.status(201).send(`User added`)
   })
 }
 
@@ -66,7 +65,7 @@ const updateUser = (req, res) => {
     [username, password, email, id],
     (error, results) => {
       if (error) {
-        throw error
+        return res.status(401).send(error.message)
       }
       res.status(200).send(`User modified with ID: ${id}`)
     }
@@ -78,7 +77,7 @@ const deleteUser = (req, res) => {
 
   pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
-      throw error
+      return res.status(401).send(error.message)
     }
     res.status(200).send(`User deleted with ID: ${id}`)
   })
