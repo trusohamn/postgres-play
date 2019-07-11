@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { Pool } = require('pg');
 const connectionSettings = process.env.NODE_ENV === 'production' ?
   {
@@ -25,6 +26,25 @@ const getTest = async (req, res) => {
     res.send("Error " + err);
   }
 };
+
+const createUsersTable = (req, res) => {
+  fs.readFile('./sql', 'utf8', (err, fileContent) => {
+    const queries = fileContent.split(';');
+    for( query of queries) {
+      console.log(query);
+      pool.query(query, (error, results) => {
+        // if (error) {
+
+        //   return res.status(401).send(error.message)
+        // }
+      })
+    }
+    res.status(200).json({ status: 'complete' });
+    })
+      
+}
+
+
 const getUsers = (req, res) => {
   pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
     if (error) {
@@ -38,6 +58,19 @@ const getUserById = (req, res) => {
   const id = parseInt(req.params.id)
 
   pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
+    if (error) {
+      return res.status(401).send(error.message)
+    }
+    res.status(200).json(results.rows)
+  })
+}
+
+const getUserByIdFunny = (req, res) => {
+  const id = req.params.id;
+  const funnyQuery = `SELECT * FROM users WHERE user_id = ${id};`;
+  console.log(funnyQuery);
+  pool.query(funnyQuery, (error, results) => {
+    console.log(results)
     if (error) {
       return res.status(401).send(error.message)
     }
@@ -89,5 +122,7 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  getTest
+  getTest,
+  getUserByIdFunny,
+  createUsersTable
 }

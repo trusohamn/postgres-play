@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    GET USER BY ID
+    <form id="normalForm">
+        <input id="normalInput" type="text"> id
+    </form>
+    :)
+    <form id="funnyForm">
+        <input id="funnyInput" type="text"> id
+    </form>
+    <div id="output"></div>
+    <button id="createTable">create users table</button>
+    <script>
+        const formHandling = (formName, inputName, apiName) => {
+            document.getElementById(formName).addEventListener('submit', (e) => {
+                e.preventDefault();
+                const getId = document.getElementById(inputName).value;
+                console.log(getId);
+                fetch(`${apiName}${getId}`)
+                    .then(data => data.json())
+                    .then(data => {
+                        document.getElementById('output').textContent = JSON.stringify(data);
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        document.getElementById('output').textContent = error;
+                    })
+            });
+            document.getElementById('createTable').addEventListener('click', (e) => {
+                e.preventDefault();
+                fetch('/table/users')
+                    // .then(data => data.json())
+                    // .then(data => {
+                    //     document.getElementById('output').textContent = JSON.stringify(data);
+                    //     console.log(data);
+                    // })
+                    // .catch(error => {
+                    //     document.getElementById('output').textContent = error;
+                    // })
+            });
+        }
+        formHandling('normalForm', 'normalInput', '/users/');
+        formHandling('funnyForm', 'funnyInput', '/users/funny/');
+
+    </script>
+</body>
+
+</html>
