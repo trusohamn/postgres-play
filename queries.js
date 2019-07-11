@@ -8,7 +8,18 @@ const pool = new Pool({
     // password: 'password',
     // port: 5432,
 })
-
+const getTest = async (req, res) => {
+    try {
+      const client = await pool.connect()
+      const result = await client.query('SELECT * FROM test_table');
+      const results = { 'results': (result) ? result.rows : null};
+      res.json( results );
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+};
 const getUsers = (req, res) => {
     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
         if (error) {
@@ -73,4 +84,5 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+    getTest
 }
