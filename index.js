@@ -12,9 +12,22 @@ app.use(
     })
 )
 
-app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
+app.get('/', (req, res) => {
+    res.json({ info: 'Node.js, Express, and Postgres API' })
 })
+
+app.get('/db', async (req, res) => {
+    try {
+      const client = await pool.connect()
+      const result = await client.query('SELECT * FROM test_table');
+      const results = { 'results': (result) ? result.rows : null};
+      res.json( results );
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
 
 app.get('/users', db.getUsers)
 app.get('/users/:id', db.getUserById)
