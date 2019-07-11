@@ -33,22 +33,16 @@ const createUsersTable = (req, res) => {
     for( query of queries) {
       console.log(query);
       pool.query(query, (error, results) => {
-        // if (error) {
-
-        //   return res.status(401).send(error.message)
-        // }
       })
     }
     res.status(200).json({ status: 'complete' });
-    })
-      
+    })  
 }
-
 
 const getUsers = (req, res) => {
   pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
     if (error) {
-      return res.status(401).send(error.message)
+      return res.status(401).send(error.message);
     }
     res.status(200).json(results.rows)
   })
@@ -94,7 +88,7 @@ const updateUser = (req, res) => {
   const { username, password, email } = req.body
 
   pool.query(
-    'UPDATE users SET username = $1, password = $2 email = $3 WHERE id = $3',
+    'UPDATE users SET username = $1, password = $2 email = $3 WHERE user-id = $3',
     [username, password, email, id],
     (error, results) => {
       if (error) {
@@ -108,7 +102,7 @@ const updateUser = (req, res) => {
 const deleteUser = (req, res) => {
   const id = parseInt(req.params.id)
 
-  pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM users WHERE user-id = $1', [id], (error, results) => {
     if (error) {
       return res.status(401).send(error.message)
     }

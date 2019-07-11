@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+    body {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 30vh;
+    }
+    </style>
 </head>
 
 <body>
@@ -32,20 +41,15 @@
                         console.log(data);
                     })
                     .catch(error => {
-                        document.getElementById('output').textContent = error;
+                        // SyntaxError: Unexpected end of JSON input 
+                        // {"error":"relation \"users\" does not exist"}
+                        document.getElementById('output').innerHTML = 
+                        '<img src="https://media1.tenor.com/images/e1697f84101352fc64d640b1844348c1/tenor.gif?itemid=12579500"/>';
                     })
             });
             document.getElementById('createTable').addEventListener('click', (e) => {
                 e.preventDefault();
-                fetch('/table/users')
-                    // .then(data => data.json())
-                    // .then(data => {
-                    //     document.getElementById('output').textContent = JSON.stringify(data);
-                    //     console.log(data);
-                    // })
-                    // .catch(error => {
-                    //     document.getElementById('output').textContent = error;
-                    // })
+                fetch('/table/users');
             });
         }
         formHandling('normalForm', 'normalInput', '/users/');
