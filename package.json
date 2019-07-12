@@ -5,8 +5,13 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "node index.js",
-        "heroku-postbuild": "npm install --production"
+        "start": "nodemon index.js",
+        "heroku-postbuild": "npm install --production",
+        "docker-getPostgres": "docker pull postgres",
+        "docker-postgres": "docker run --rm --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v `pwd`/volumes/postgres:/var/lib/postgresql/data postgres",
+        "postgres-stop": "docker stop pg-docker",
+        "setup-postgres": "npm run docker-postgres && npm run reset_db",
+        "reset_db": "docker exec -i pg-docker psql -U postgres < createTable.sql"
     },
     "dependencies": {
         "dotenv": "^8.0.0",

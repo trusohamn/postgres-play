@@ -7,10 +7,10 @@ const connectionSettings = process.env.NODE_ENV === 'production' ?
   }
   :
   {
-    user: 'me',
+    user: 'postgres',
     host: 'localhost',
-    database: 'api',
-    password: 'password',
+    database: 'postgres',
+    password: 'docker',
     port: 5432
   }
 const pool = new Pool(connectionSettings);
@@ -28,11 +28,12 @@ const getTest = async (req, res) => {
 };
 
 const createUsersTable = (req, res) => {
-  fs.readFile('./sql', 'utf8', (err, fileContent) => {
+  fs.readFile('./createTable.sql', 'utf8', (err, fileContent) => {
     const queries = fileContent.split(';');
     for( query of queries) {
       console.log(query);
       pool.query(query, (error, results) => {
+        console.log(error,results);
       })
     }
     res.status(200).json({ status: 'complete' });
@@ -50,7 +51,6 @@ const getUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id)
-
   pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
     if (error) {
       return res.status(401).send(error.message)
@@ -62,7 +62,6 @@ const getUserById = (req, res) => {
 const getUserByIdFunny = (req, res) => {
   const id = req.params.id;
   const funnyQuery = `SELECT * FROM users WHERE user_id = ${id};`;
-  console.log(funnyQuery);
   pool.query(funnyQuery, (error, results) => {
     console.log(results)
     if (error) {
