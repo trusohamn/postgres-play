@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Demo</title>
     <style>
     body {
         display:flex;
@@ -13,6 +13,10 @@
         justify-content: center;
         flex-direction: column;
         margin-top: 30vh;
+        font-size: 1.3em;
+    }
+    input {
+        padding: 0.5em;
     }
     </style>
 </head>
@@ -20,11 +24,11 @@
 <body>
     GET USER BY ID
     <form id="normalForm">
-        <input id="normalInput" type="text"> id
+        <input required id="normalInput" type="text"> id
     </form>
     :)
     <form id="funnyForm">
-        <input id="funnyInput" type="text"> id
+        <input required id="funnyInput" type="text"> id
     </form>
     <div id="output"></div>
     <button id="createTable">create users table</button>
@@ -37,7 +41,7 @@
                 fetch(`${apiName}${getId}`)
                     .then(data => data.json())
                     .then(data => {
-                        document.getElementById('output').textContent = JSON.stringify(data);
+                        document.getElementById('output').textContent = data[0].username;
                         console.log(data);
                     })
                     .catch(error => {
